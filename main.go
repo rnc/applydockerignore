@@ -20,12 +20,13 @@ func main() {
 		panic("Missing main argument")
 	}
 
-	fmt.Println("Will apply .dockerignore on path", root)
+	cwd, _ := os.Getwd()
+	fmt.Printf("Will apply .dockerignore on path %v ( %v )\n", root, cwd)
 	file, dockerignoreerr := os.Open(".dockerignore")
 	check(dockerignoreerr)
 
 	excludes, _ = dockerignore.ReadAll(file)
-	fmt.Println("Patterns are",excludes)
+	fmt.Printf("Patterns are %v\n",excludes)
 
 	filepath.Walk(root, visit)
 }
@@ -36,11 +37,21 @@ func check(e error) {
     }
 }
 
-func visit(file string, f os.FileInfo, err error) error {
-	rm, _ := fileutils.Matches(file, excludes)
+func isDirectory(path string) string {
+	fileInfo, err := os.Stat(path)
+	check(err)
+	if fileInfo.IsDir() {
+		return "directory"
+	} else {
+		return "file"
+	}
+}
+
+func visit(path string, f os.FileInfo, err error) error {
+	rm, _ := fileutils.Matches(path, excludes)
 	if rm {
-		fmt.Printf("Removing file %v\n" , file)
-		var err = os.Remove(file)
+		fmt.Printf("Removing %v %v\n", isDirectory(path), path)
+		var err = os.Remove(path)
 		check(err)
 	}
 	return nil
