@@ -11,9 +11,18 @@ import (
 )
 
 var excludes []string
+var Version = "No version provided"
 
 func main() {
+
+	v := flag.Bool("v", false, "current app version")
 	flag.Parse()
+
+	if *v {
+		fmt.Printf("Version %v\n", Version)
+		os.Exit(0)
+	}
+
 	root := flag.Arg(0)
 	if len(root) == 0 {
 		fmt.Printf ("Pass in file path to examine.\n")
