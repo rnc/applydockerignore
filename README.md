@@ -11,7 +11,3 @@ The use case is where the repository is ADD'ed via a tar file to the docker imag
 applydockerignore <path>
 
 The `.dockerignore` file must exist within the target path.
-
-## Copyright
-
-License: Apache License 2.0 (see http://apache.org/licenses/LICENSE-2.0.html).
