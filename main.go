@@ -55,8 +55,9 @@ func readDockerIgnore(file *os.File) {
 
 func isDirectory(path string) string {
 	fileInfo, err := os.Stat(path)
-	check(err)
-	if fileInfo.IsDir() {
+	if err != nil {
+		return "non-existent"
+	} else if fileInfo.IsDir() {
 		return "directory"
 	} else {
 		return "file"
@@ -68,7 +69,7 @@ func visit(path string, f os.FileInfo, err error) error {
 	check(err)
 	if rm {
 		fmt.Printf("Removing %v %v\n", isDirectory(path), path)
-		var err = os.Remove(path)
+		var err = os.RemoveAll(path)
 		check(err)
 	}
 	return nil
